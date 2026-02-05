@@ -14763,7 +14763,18 @@ function newGameRandom(){ solution = pickRandom(); resetTilesAndKeys(); toast("N
 function refreshBoardSameWord(){ resetTilesAndKeys(); toast("Board refreshed"); }
 
 /* ======================== HELPERS ========================== */
-function pickRandom(){ return ANSWERS[Math.floor(Math.random()*ANSWERS.length)] || "adieu"; }
+function pickRandom(){
+  const arr = Array.isArray(ANSWERS) ? ANSWERS : Array.from(ANSWERS);
+  if (!arr.length) return "adieu";
+
+  for (let i = 0; i < 2000; i++) {
+    const w = arr[Math.floor(Math.random() * arr.length)];
+    const s = (w ?? "").toString().trim();
+    if (s) return s;
+  }
+  return "adieu"; // fallback if everything is junk
+}
+
 function toast(msg,t=1100){ const el=document.getElementById('toast'); el.textContent=msg; el.classList.add('show'); clearTimeout(el._t); el._t=setTimeout(()=>el.classList.remove('show'),t); }
 
 /* ===================== PWA: register SW ==================== */
